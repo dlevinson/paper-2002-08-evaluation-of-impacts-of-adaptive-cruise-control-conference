@@ -1,0 +1,162 @@
+// 	Pipeline Simulation Program 
+// 	Version 2.0 Beta 0.0.1 	Dec. 2000
+//
+// 	This program is used to simulate the traffic flow in a single pipeline.
+// 
+
+#include <iostream>
+#include <cstring>
+#include <vector>
+#include <algorithm>
+#include <cstdio>
+#include "vehicle.h"
+
+const short maxVehicleNumber= 200;
+const float RoadLength= 400;		// meters
+const float simulateTime= 20;  	// seconds
+// const float maxVehicleSize = 5;  // meter
+// const float initialSpeed= 20 *1.6*1000/(3600);  	// meter/s
+// const float inTrafficFlowRate= 1; // veh/s
+// const float sampleTime = 0.1;  // s 
+vehicle vehicleCalculation(vehicle veh1, vehicle veh2);
+
+// Initialize the platoon
+typedef vector<vehicle> Platoon;
+
+	
+using namespace std; 	//introduces namespace std
+int main()
+{		
+	Platoon vehiclePlatoon;
+	int i;
+	long numberOfVehicles;
+	long firstVehicleID=1;
+	long lastVehicleID;
+	float time=0.0, timeHeadway,  lastTimeHeadway;
+	FILE *fd;
+	timeHeadway= 1 / (inTrafficFlowRate);
+
+	vector<vehicle>::iterator IDinPlatoon;
+	
+	vehicle junkVehicle, junkVehicle1, junkVehicle2;
+	
+// Open the data file to store simulation results
+	fd=fopen("simudata.dat","w"); 	
+	
+// Calclulate the initial number of vehicles
+	numberOfVehicles = RoadLength / (initialSpeed * timeHeadway + maxVehicleSize);
+	lastVehicleID = numberOfVehicles;
+	
+// Initialize the postion, speed and acceleration of the platoon 
+	for(i=0;i<=numberOfVehicles;i++)	
+	{	
+		junkVehicle.vehicleID= i;
+		junkVehicle.vehiclePosition=RoadLength - (initialSpeed * timeHeadway + maxVehicleSize) * i;
+		junkVehicle.vehicleSpeed=initialSpeed;
+		junkVehicle.vehicleAccel=0.0;
+	
+		vehiclePlatoon.push_back(junkVehicle);
+	}
+
+//
+// The main loop: simulate unitil time=simulateTime
+//
+	do{	
+	
+		// (1)
+		// The last vehicle's timeHeadway = lastVehicle's postion / initialSpeed
+		// If timeHeadway > 1/(inTrafficFlowRate), then GenerateNewVehicle  
+		junkVehicle=vehiclePlatoon.back();
+		lastTimeHeadway = junkVehicle.vehiclePosition / initialSpeed;
+		if(lastTimeHeadway > timeHeadway)
+		{
+			numberOfVehicles++; 
+			lastVehicleID++;
+			
+			// Parameters of New Vehicle
+			junkVehicle.vehicleID=lastVehicleID;
+			junkVehicle.vehiclePosition = 0;
+			junkVehicle.vehicleSpeed=initialSpeed;
+			junkVehicle.vehicleAccel=0;
+			// Add new vehicle
+			vehiclePlatoon.push_back(junkVehicle);
+		}	
+		
+		// (2)
+		// If vehiclePosition > RoadLength then delete first vehicle
+		junkVehicle=vehiclePlatoon.front();
+		if(junkVehicle.vehiclePosition > RoadLength)	
+		{	
+			
+			vehiclePlatoon.erase(vehiclePlatoon.begin());
+			numberOfVehicles--;
+			firstVehicleID++;
+			
+			// The speed of the new first vehicle become constant
+			junkVehicle = vehiclePlatoon.front();
+			junkVehicle.vehicleAccel=0;
+			vehiclePlatoon[0]=junkVehicle;
+		}
+		
+		// (3)
+		// Calculate the new states of each vehicle, not including the first vehicle
+		for(i=0;i<=numberOfVehicles;i++) //IDinPlatoon; IDinPlatoon!=vehiclePlatoon.begin(); IDinPlatoon--)
+		{
+			if(i==0)
+			{
+			junkVehicle1 = vehiclePlatoon.at(i); //*IDinPlatoon;
+			junkVehicle2 = vehiclePlatoon.at(i);  //*(++IDinPlatoon);
+			}
+			else
+			{
+				junkVehicle1 = vehiclePlatoon.at(i); //*IDinPlatoon;
+				junkVehicle2 = vehiclePlatoon.at(i-1);  //*(++IDinPlatoon);
+			}
+			junkVehicle1 = vehicleCalculation(junkVehicle1, junkVehicle2);
+			vehiclePlatoon[i]= junkVehicle1;
+		}
+
+		//
+		// (4)
+		// Save the states of each vehicle
+		for(i=0;i<=numberOfVehicles;i++)
+		{
+			junkVehicle1 = vehiclePlatoon[i];
+			fprintf(fd, "%8.4f\t", time);
+			fprintf(fd, "%d\t", junkVehicle1.vehicleID);
+			fprintf(fd, "%8.4f\t", junkVehicle1.vehiclePosition); 
+			fprintf(fd, "%8.4f\t", junkVehicle1.vehicleSpeed);
+			fprintf(fd, "%8.4f\n", junkVehicle1.vehicleAccel);
+
+		}
+				
+		// (5)
+		// Update Time
+		time=time+sampleTime;
+		
+	}while(time<simulateTime);
+	
+	fclose(fd);
+	return 0;
+}
+
+vehicle vehicleCalculation(vehicle veh1, vehicle veh2)
+{
+	// Data used in calculation:
+	// The former positions and speeds of this vehicle and the leading vehicle
+	// Data generated : the present position, speed and acceleration of this vehicle
+	
+	//State equations
+	//	f(1:n,1) = X(n+1 : 2*n,1);
+	//	f(n+1:2*n,1) = X(2*n+1 : 3*n,1);
+	//	f(2*n+1:3*n,1) = (-1/tau) *  X(2*n+1:3*n,1) + (1/tau) *xdes_dot_dot ;
+
+	veh1.vehiclePosition = veh1.vehiclePosition +  veh1.vehicleSpeed * sampleTime + 0.5 *  veh1.vehicleAccel * sampleTime* sampleTime;
+	veh1.vehicleSpeed = veh1.vehicleSpeed + sampleTime * veh1.vehicleAccel;
+	veh1.vehicleAccel = 1; //carFollowing(veh1.vehiclePosition, veh1.vehicleSpeed, veh2.vehiclePosition, veh2.vehicleSpeed);
+
+	return veh1;
+}
+
+
+
