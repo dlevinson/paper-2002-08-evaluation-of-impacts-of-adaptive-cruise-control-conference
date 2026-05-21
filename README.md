@@ -38,10 +38,10 @@ Updated: 2026-05-16 23:51:00 AEST
 <!-- package-hardening-status:start -->
 ## Package Hardening Status
 
-Generated: 2026-05-22 06:51:10 AEST
+Generated: 2026-05-22 07:46:52 AEST
 
 - Pipeline: `READY-TO-UPLOAD/PUBLIC`
 - Sidecars added/updated: `PACKAGE_STATUS.md`, `PACKAGE_MANIFEST.csv`, `LICENSE_STATUS.md`.
-- Paper reference copies are for local audit convenience and are not public-upload assets without rights review.
+- Public paper-package repositories include `paper/` PDF reference copies by owner decision; publisher takedown requests can be handled later if they arise.
 - Final GitHub upload should use the manifest include statuses and the license-status note.
 <!-- package-hardening-status:end -->
