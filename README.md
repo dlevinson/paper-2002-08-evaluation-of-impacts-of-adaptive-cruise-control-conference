@@ -1,5 +1,9 @@
 # Evaluation of Impacts of Adaptive Cruise Control on Mixed Traffic Flow
 
+## Contribution
+
+This paper develops a microscopic C++ simulation for evaluating how adaptive cruise control changes traffic flow when automated and manually driven vehicles share a lane. By comparing constant- and variable-time-headway control laws across penetration and demand scenarios, it quantifies effects on speed, density, flow, and traffic stability.
+
 ## Bibliographic Information
 
 - Row ID: `paper-2002-08`
