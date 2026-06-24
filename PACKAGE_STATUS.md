@@ -1,6 +1,6 @@
 # Package Status: Evaluation of Impacts of Adaptive Cruise Control on Mixed Traffic Flow
 
-Generated: 2026-05-22 07:46:52 AEST
+Generated: 2026-06-23 AEST
 
 ## Audit State
 
@@ -15,7 +15,7 @@ Generated: 2026-05-22 07:46:52 AEST
 
 ## Package Checks
 
-- Files in manifest: 28
+- Files in manifest: 29
 - Paper reference files: 2
 - Code candidates: 16
 - Data candidates: 0

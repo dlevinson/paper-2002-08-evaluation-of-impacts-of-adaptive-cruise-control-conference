@@ -19,6 +19,14 @@ This package is ready for upload review as a best-available legacy code and docu
 
 The paper states that the results were produced with a C++ microscopic traffic simulation program for a one-lane highway section with vehicle entry, vehicle exit, vehicle-state updates, traffic-state calculations, Gipps manual-driver behavior, ACC control laws, and mixed ACC/manual fleets. The source files found in both `/Users/dlev2617/Documents/Students/XiZou` and `/Users/dlev2617/Documents/Data/~Nexus_Data/~CODE/AdaptiveCruiseControl Project-Code` are byte-identical and match that simulation family.
 
+## License Boundary
+
+The repository records a mixed boundary in `LICENSE.md`:
+
+- MIT for author-created code and scripts.
+- CC BY 4.0 for repository documentation.
+- Original terms for `paper/ACC.pdf` and any third-party materials.
+
 ## Package Contents
 
 - `code/legacy-original/`: renamed, byte-preserved copies of the original legacy C++ files.
@@ -37,7 +45,7 @@ Included source files cover the Gipps/manual baseline, pure ACC constant-time-he
 
 The source folder also contains student applications, proposal drafts, presentation drafts, plagiarism/admin material, and `license.dat`. Those files are not paper data/code/documentation and are intentionally excluded.
 
-Updated: 2026-05-16 23:51:00 AEST
+Updated: 2026-06-23 AEST
 
 <!-- package-hardening-status:start -->
 ## Package Hardening Status
@@ -45,7 +53,7 @@ Updated: 2026-05-16 23:51:00 AEST
 Generated: 2026-05-22 07:46:52 AEST
 
 - Pipeline: `UPLOADED`
-- Sidecars added/updated: `PACKAGE_STATUS.md`, `PACKAGE_MANIFEST.csv`, `LICENSE_STATUS.md`.
+- Sidecars added/updated: `PACKAGE_STATUS.md`, `PACKAGE_MANIFEST.csv`, `LICENSE_STATUS.md`, `LICENSE.md`.
 - Public paper-package repositories include `paper/` PDF reference copies by owner decision; publisher takedown requests can be handled later if they arise.
 - Final GitHub upload should use the manifest include statuses and the license-status note.
 <!-- package-hardening-status:end -->
